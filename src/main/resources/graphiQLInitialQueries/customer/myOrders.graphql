@@ -1,0 +1,16 @@
+query myOrders {
+    orders(limit:5, orderBy: {createdAt:desc}){
+        purchaseOrderId
+        createdAt
+        orderStatus
+        orderLines(limit: 8 orderBy: { orderLineId: desc})
+        {
+            unitPrice
+            quantity
+            product {
+                productId
+                description
+            }
+        }
+    }
+}

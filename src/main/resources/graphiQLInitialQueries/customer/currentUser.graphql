@@ -1,0 +1,7 @@
+query tryCurrentUser {
+    tryCurrentUser(limit:1){
+        userAccountId
+        name
+        username
+    }
+}

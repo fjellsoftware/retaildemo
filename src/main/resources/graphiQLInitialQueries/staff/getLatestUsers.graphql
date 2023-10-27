@@ -1,0 +1,12 @@
+query getLatestUsers {
+	users(limit: 10 orderBy: { createdAt:desc}){
+		userAccountId
+		createdAt
+		username
+		name
+		role
+		loginSessions(limit: 5, orderBy: {lastUpdatedAt: desc})		 {
+			isSignedOut
+		}
+	}
+}

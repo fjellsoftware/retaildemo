@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Application prod" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.fjellsoftware.retaildemo.Main" />
+    <module name="retail-demo" />
+    <option name="PROGRAM_PARAMETERS" value="-m prod -l /var/log/retail-demo -U https://retail-demo.loppi.io/" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,6 @@
+mutation markOrderShipped ($purchaseOrderId: Int!) {
+    orderStatusBatchUpdate(ordersToUpdate: [{wherePurchaseOrderId: $purchaseOrderId, orderStatus: "SHIPPED"}]){
+        purchaseOrderId
+        orderStatus
+    }
+}

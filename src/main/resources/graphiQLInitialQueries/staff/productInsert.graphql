@@ -1,0 +1,10 @@
+mutation productInsert ($productToInsert: ProductToInsert!){
+    productInsert(productToInsert: $productToInsert){
+        productId
+        createdAt
+        lastUpdatedAt
+        currentUnitPrice
+        description
+        stockCode
+    }
+}

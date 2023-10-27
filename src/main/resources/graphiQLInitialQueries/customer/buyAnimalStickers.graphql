@@ -1,0 +1,16 @@
+mutation buyAnimalStickers {
+    placeOrder(orderToInsert: {
+        address: "123 Maple Street, Anytown",
+        name: "John Doe",
+        phoneNumber: "+44 808 157 0192"
+        countryId: 9
+        orderLinesToInsert: [{productId: 28, quantity: 1, unitPrice: "0.21"}]}){
+        purchaseOrderId
+        orderLines {
+            productId
+            quantity
+            unitPrice
+        }
+    }
+}
+

@@ -1,0 +1,161 @@
+{
+  "getOrders": {"data" : {"orders" : [{"purchaseOrderId":581587,"orderStatus":"SHIPPED","customer":{"userAccountId" : "ad17f939-e810-4d67-9690-1a00c37d846d", "username" : "john.doe_6dO2d23qWNvF"},"orderLines":[{"unitPrice":"3.75","quantity":4,"product":{"productId" : 1576, "stockCode" : "22726"}},
+    {"unitPrice":"3.75","quantity":4,"product":{"productId" : 1580, "stockCode" : "22730"}},
+    {"unitPrice":"1.95","quantity":8,"product":{"productId" : 1243, "stockCode" : "22367"}}]},
+    {"purchaseOrderId":581586,"orderStatus":"SHIPPED","customer":{"userAccountId" : "97f364ed-1614-4b30-b8f9-7423a61207cd", "username" : "john.doe_ENvbKrB7oIWE"},"orderLines":[{"unitPrice":"2.95","quantity":8,"product":{"productId" : 961, "stockCode" : "22061"}},
+      {"unitPrice":"1.25","quantity":24,"product":{"productId" : 2098, "stockCode" : "23275"}},
+      {"unitPrice":"8.95","quantity":24,"product":{"productId" : 428, "stockCode" : "21217"}}]},
+    {"purchaseOrderId":581585,"orderStatus":"SHIPPED","customer":{"userAccountId" : "f59f17bd-5085-4985-94a6-ebb7c777b536", "username" : "john.doe_Jghj4zPkJWFH"},"orderLines":[{"unitPrice":"1.25","quantity":12,"product":{"productId" : 3098, "stockCode" : "84946"}},
+      {"unitPrice":"0.85","quantity":24,"product":{"productId" : 3030, "stockCode" : "84832"}},
+      {"unitPrice":"2.08","quantity":12,"product":{"productId" : 1920, "stockCode" : "23084"}}]}]}},
+  "getLoginSessions": {
+    "data": {
+      "loginSessions": [
+        {
+          "isSignedOut": false,
+          "userAccount": {
+            "name": "John Doe",
+            "role": "STAFF"
+          }
+        }
+      ]
+    }
+  },
+  "getUsers": {
+    "data": {
+      "users": [
+
+        {
+          "username": "john.doe_u4CC23NWkzOg",
+          "name": "John Doe",
+          "role": "CUSTOMER",
+          "loginSessions": []
+        },
+        {
+          "username": "john.doe_1wBwQfNK3vEA",
+          "name": "John Doe",
+          "role": "CUSTOMER",
+          "loginSessions": []
+        },
+        {
+          "username": "john.doe_eIuSIl7GKU3G",
+          "name": "John Doe",
+          "role": "CUSTOMER",
+          "loginSessions": []
+        },
+        {
+          "username": "john.doe_ZWgvNlhXg2Gm",
+          "name": "John Doe",
+          "role": "CUSTOMER",
+          "loginSessions": []
+        }
+      ]
+    }
+  },
+  "getOrderStatuses": {
+    "data": {
+      "orders": [
+        {
+          "orderStatus": "SHIPPED"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        }
+      ]
+    }
+  },
+  "getOrderStatusesNew": {
+    "data": {
+      "orders": [
+        {
+          "orderStatus": "NEW"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        },
+        {
+          "orderStatus": "SHIPPED"
+        }
+      ]
+    }
+  },
+  "productInsert": {
+    "data": {
+      "productInsert": {
+        "currentUnitPrice": "1.45",
+        "description": "LARGE INFLATABLE ANIMAL"
+      }
+    }
+  },
+  "latestProductsWithInflatableAnimal":{
+    "data": {
+      "products": [
+        {
+          "currentUnitPrice": "1.45",
+          "description": "LARGE INFLATABLE ANIMAL"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI VANILLA INCENSE CONES"
+        },
+        {
+          "currentUnitPrice": "0.30",
+          "description": "NAMASTE SWAGAT INCENSE"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "INCENSE BAZAAR PEACH"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI ROSE INCENSE IN TUBE"
+        }
+      ]
+    }
+  },
+  "productUpdate": {
+    "data": {
+      "productUpdate": {
+        "description": "SMALL INFLATABLE ANIMAL"
+      }
+    }
+  },
+  "latestProductsAfterUpdate":{
+    "data": {
+      "products": [
+        {
+          "currentUnitPrice": "1.45",
+          "description": "SMALL INFLATABLE ANIMAL"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI VANILLA INCENSE CONES"
+        },
+        {
+          "currentUnitPrice": "0.30",
+          "description": "NAMASTE SWAGAT INCENSE"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "INCENSE BAZAAR PEACH"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI ROSE INCENSE IN TUBE"
+        }
+      ]
+    }
+  },
+
+  "notLoggedIn": {"errors":[{"message":"Not logged in."}]},
+  "unauthorized": {"errors":[{"message":"Unauthorized."}]}
+}

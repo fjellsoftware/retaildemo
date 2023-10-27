@@ -1,0 +1,42 @@
+{
+  "getProducts": {
+    "data": {
+      "products": [
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI ROSE INCENSE IN TUBE"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "ORIGAMI VANILLA INCENSE CONES"
+        },
+        {
+          "currentUnitPrice": "0.30",
+          "description": "NAMASTE SWAGAT INCENSE"
+        },
+        {
+          "currentUnitPrice": "0.42",
+          "description": "INCENSE BAZAAR PEACH"
+        },
+        {
+          "currentUnitPrice": "0.85",
+          "description": "ORIGAMI SANDLEWOOD INCENSE/CAND SET"
+        }
+      ]
+    }
+  },
+  "zeroUsers": {"data": { "tryCurrentUser":  []}},
+  "solveCaptchaFailure": {"errors":[{"message":"Invalid captcha response."}]},
+  "notLoggedIn": {"errors":[{"message":"Not logged in."}]},
+  "loginFailed": {"data":{ "login": { "succeeded": false }}},
+  "getOrdersNoOrders": {"data" : {"orders" : []}},
+  "placeOrderWithoutOrderId": {"data" : {"orders" : [{"orderLines":[{"quantity":10,"unitPrice":"0.19","product":{"productId" : 40, "description" : "TEATIME PUSH DOWN RUBBER", "stockCode" : "16052"}},
+    {"quantity":1,"unitPrice":"0.12","product":{"productId" : 39, "description" : "TEATIME GEL PENS ASST", "stockCode" : "16049"}},
+    {"quantity":3,"unitPrice":"0.12","product":{"productId" : 38, "description" : "TEATIME ROUND PENCIL SHARPENER ", "stockCode" : "16048"}}]}]}},
+  "upgradeToStaff": {"data":{"demoUpgradeToStaff":{"ignored":true}}},
+  "downgradeToCustomer": {"data":{"demoDowngradeToCustomer":{"ignored":true}}},
+  "rateLimit": { "errors":  [{"message": "Too many requests, slow down."}]},
+  "mutationTooBig": { "errors":  [{"message": "Request too big."}]},
+  "queryTooBig":  {"errors":[{"message":"Maximum nodes allowed to fetch in one root field is 200, but field [orders] fetches [420]."}]},
+  "queryTooDeep": {"errors":[{"message":"Maximum query depth is 3, found query depth [5] in field [__schema]."}]}
+}

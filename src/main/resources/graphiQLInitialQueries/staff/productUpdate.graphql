@@ -1,0 +1,10 @@
+mutation productUpdate ($productToUpdate: ProductToUpdate!){
+    productUpdate(productToUpdate: $productToUpdate){
+        productId
+        description
+        stockCode
+        currentUnitPrice
+        lastUpdatedAt
+        createdAt
+    }
+}

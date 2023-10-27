@@ -1,0 +1,265 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: QueryRoot
+    mutation: MutationRoot
+}
+
+type IgnoredResult {
+    ignored: Boolean!
+}
+
+type LoginResult {
+    succeeded: Boolean!
+    tooManyAttempts: Boolean!
+}
+
+"Root mutation type."
+type MutationRoot {
+    "Downgrades current user to customer role."
+    demoDowngradeToCustomer: IgnoredResult!
+    "Upgrades current user to a staff member role. Anyone who is logged in can do this. Don't do this in production without access control."
+    demoUpgradeToStaff: IgnoredResult!
+    getBcryptSalt(email: String!): SaltResult!
+    login(email: String!, passwordBcrypt: String!): LoginResult!
+    placeOrder(orderToInsert: OrderToInsert!): OrderMutationResult!
+    signOut: IgnoredResult!
+    signUp(email: String!, name: String!, passwordBcrypt: String!): IgnoredResult!
+    updatePassword(previousPassword: String!, updatedPassword: String!): IgnoredResult!
+    verifyCaptcha(token: String!): UUIDTokenResult!
+}
+
+type OrderLineMutationResult {
+    orderLineId: Int!
+}
+
+type OrderLineResult {
+    orderLineId: Int!
+    product: ProductResult!
+    quantity: Int!
+    unitPrice: BigDecimal!
+}
+
+type OrderMutationResult {
+    createdAt: OffsetDateTime!
+    orderLines: [OrderLineMutationResult!]!
+    orderStatus: String!
+    purchaseOrderId: Int!
+}
+
+type OrderResult {
+    createdAt: OffsetDateTime!
+    orderLines(
+        "Limit the number of results."
+        limit: Int!,
+        "How many results should be skipped."
+        offset: Int,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: OrderLineOrderBy
+    ): [OrderLineResult!]!
+    orderStatus: String!
+    purchaseOrderId: Int!
+}
+
+type ProductResult {
+    currentUnitPrice: BigDecimal!
+    description: String!
+    productId: Int!
+    stockCode: String!
+}
+
+"Root query type."
+type QueryRoot {
+    orders(
+        "Limit the number of results."
+        limit: Int!,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: OrderOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: OrderCriteria
+    ): [OrderResult!]!
+    products(
+        "Limit the number of results."
+        limit: Int!,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: ProductOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: ProductCriteriaExpression
+    ): [ProductResult!]!
+    "If logged in, this returns a list with one user which is the current user, otherwise this returns an empty list."
+    tryCurrentUser(
+        "Limit the number of results."
+        limit: Int!
+    ): [UserResult!]!
+}
+
+type SaltResult {
+    salt: String!
+}
+
+type UUIDTokenResult {
+    token: UUID!
+}
+
+type UserResult {
+    createdAt: OffsetDateTime!
+    email: String!
+    name: String!
+    role: String!
+    userAccountId: Int!
+}
+
+"Enum for determining order by direction."
+enum OrderByDirectionEnum {
+    "Ascending order."
+    asc
+    "Descending order."
+    desc
+}
+
+"Enum for determining order by direction."
+enum OrderByDirectionWithNullsEnum {
+    "Ascending order with nulls first."
+    ascNullsFirst
+    "Ascending order with nulls last."
+    ascNullsLast
+    "Descending order with nulls first."
+    descNullsFirst
+    "Descending order with nulls last."
+    descNullsLast
+}
+
+"A sequence of bytes encoded as a String using the MIME format specified in RFC 2045. For example: \"SGVsbG8gV29ybGQ=\", which, when decoded becomes these bytes(hex): [48, 65, 6c, 6c, 6f, 20, 57, 6f, 72, 6c, 64]"
+scalar Base64
+
+"A signed decimal number of arbitrary precision encoded as a String in the format described in Java's BigDecimal constructor: https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html#BigDecimal-java.lang.String-. For example: \"94712.5124\""
+scalar BigDecimal
+
+"An integer in the interval -9223372036854775808 to 9223372036854775807."
+scalar Long
+
+"A single point in time encoded as a String in the ISO-8601 extended offset date-time format. For example: \"2011-12-03T10:15:30+01:00\""
+scalar OffsetDateTime
+
+"An integer in the interval -32768 to 32767."
+scalar Short
+
+"A universally unique identifier encoded as a String in the format described in RFC 4122. For example: \"b53d5ebf-4d1b-4252-8dab-29d3af225bbd\""
+scalar UUID
+
+input BigDecimalBetween {
+    lowerBound: BigDecimal!
+    upperBound: BigDecimal!
+}
+
+"Type for creating a boolean expression for a field of type BigDecimal. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input BigDecimalCriteria {
+    between: BigDecimalBetween
+    eq: BigDecimal
+    ge: BigDecimal
+    gt: BigDecimal
+    in: [BigDecimal!]
+    le: BigDecimal
+    lt: BigDecimal
+    ne: BigDecimal
+    notBetween: BigDecimalNotBetween
+    notIn: [BigDecimal!]
+}
+
+input BigDecimalNotBetween {
+    lowerBound: BigDecimal!
+    upperBound: BigDecimal!
+}
+
+input IntBetween {
+    lowerBound: Int!
+    upperBound: Int!
+}
+
+"Type for creating a boolean expression for a field of type Int. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input IntCriteria {
+    between: IntBetween
+    eq: Int
+    ge: Int
+    gt: Int
+    in: [Int!]
+    le: Int
+    lt: Int
+    ne: Int
+    notBetween: IntNotBetween
+    notIn: [Int!]
+}
+
+input IntNotBetween {
+    lowerBound: Int!
+    upperBound: Int!
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input OrderCriteria {
+    purchaseOrderId: IntCriteria
+}
+
+"Type for determining the order for result list of the orderLine field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input OrderLineOrderBy {
+    orderLineId: OrderByDirectionEnum
+}
+
+"Type for containing all data required to insert a new OrderLine object."
+input OrderLineToInsert {
+    productId: Int!
+    quantity: Int!
+    unitPrice: BigDecimal!
+}
+
+"Type for determining the order for result list of the order field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input OrderOrderBy {
+    createdAt: OrderByDirectionEnum
+}
+
+"Type for containing all data required to insert a new Order object."
+input OrderToInsert {
+    address: String!
+    countryId: Int!
+    name: String!
+    orderLinesToInsert: [OrderLineToInsert!]
+    phoneNumber: String!
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input ProductCriteria {
+    currentUnitPrice: BigDecimalCriteria
+    description: StringCriteria
+    productId: IntCriteria
+    stockCode: StringCriteria
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set. "
+input ProductCriteriaExpression {
+    currentUnitPrice: BigDecimalCriteria
+    description: StringCriteria
+    "This field takes a list of elements that are boolean expressions, and the resulting boolean expression is the disjunction (OR) of all of them. If this field is set, then no other fields can be set."
+    or: [ProductCriteria!]
+    productId: IntCriteria
+    stockCode: StringCriteria
+}
+
+"Type for determining the order for result list of the product field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input ProductOrderBy {
+    createdAt: OrderByDirectionEnum
+    currentUnitPrice: OrderByDirectionEnum
+    productId: OrderByDirectionEnum
+    stockCode: OrderByDirectionEnum
+}
+
+"Type for creating a boolean expression for a field of type String. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input StringCriteria {
+    eq: String
+    ilike: String
+    in: [String!]
+    like: String
+    ne: String
+    notIlike: String
+    notIn: [String!]
+    notLike: String
+}

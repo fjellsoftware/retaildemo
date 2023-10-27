@@ -1,0 +1,26 @@
+query getLatestOrders {
+    orders(limit: 10 orderBy: { lastUpdatedAt:desc}){
+        purchaseOrderId
+        orderStatus
+        createdAt
+        lastUpdatedAt
+        name
+        address
+        phoneNumber
+        customer{
+            userAccountId
+            createdAt
+            name
+            username
+        }
+        orderLines(limit: 5, orderBy: {orderLineId: desc}){
+            unitPrice
+            quantity
+            product {
+                description
+                productId
+                stockCode
+            }
+        }
+    }
+}

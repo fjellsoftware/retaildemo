@@ -1,0 +1,17 @@
+[Unit]
+Description=retail-demo service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+Type=simple
+
+LoadCredential=hcaptcha_secret:/home/ubuntu/hcaptcha_secret
+LoadCredential=database_secret:/home/ubuntu/database_secret
+
+ExecStart=java -jar /home/ubuntu/retail-demo/retail-demo-1.0-jar-with-dependencies.jar -m prod -l /var/log/retail-demo -U https://retail-demo.loppi.io -p 8082
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

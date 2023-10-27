@@ -1,0 +1,8 @@
+introduction.graphql
+currentUser.graphql
+myOrders.graphql
+getCheapDecorations.graphql
+buyAnimalStickers.graphql
+login.graphql
+upgradeToStaff.graphql
+signOut.graphql

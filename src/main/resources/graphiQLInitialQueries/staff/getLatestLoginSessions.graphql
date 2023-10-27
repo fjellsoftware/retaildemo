@@ -1,0 +1,14 @@
+query getLatestLoginSessions {
+	loginSessions(limit: 10 orderBy: { createdAt:desc}){
+		createdAt
+		lastUpdatedAt
+		isSignedOut
+		userAccount {
+			userAccountId
+			createdAt
+			username
+			name
+			role
+		}
+	}
+}

@@ -1,0 +1,298 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: QueryRoot
+    mutation: MutationRoot
+}
+
+type LoginSessionResult {
+    createdAt: OffsetDateTime!
+    isSignedOut: Boolean!
+    lastUpdatedAt: OffsetDateTime!
+    user: UserResult!
+}
+
+"Root mutation type."
+type MutationRoot {
+    "Modifies, inserts and deletes a set of orders based on arguments and fetches an unordered list of the after-modification state of all modified objects."
+    orderStatusBatchUpdate(
+        "Which orders to update and the updated data. Not required but cannot be null."
+        ordersToUpdate: [OrderToUpdate!]
+    ): [OrderMutationResult!]!
+    productInsert(productToInsert: ProductToInsert!): ProductMutationResult!
+    productUpdate(productToUpdate: ProductToUpdate!): ProductMutationResult!
+}
+
+type OrderLineResult {
+    orderLineId: Int!
+    product: ProductResult!
+    purchaseOrder: OrderResult!
+    quantity: Int!
+    unitPrice: BigDecimal!
+}
+
+type OrderMutationResult {
+    orderStatus: String!
+    purchaseOrderId: Int!
+}
+
+type OrderResult {
+    createdAt: OffsetDateTime!
+    customer: UserResult!
+    lastUpdatedAt: OffsetDateTime!
+    orderLines(
+        "Limit the number of results."
+        limit: Int!,
+        "How many results should be skipped. Cannot be null."
+        offset: Int,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: OrderLineOrderBy
+    ): [OrderLineResult!]!
+    orderStatus: String!
+    purchaseOrderId: Int!
+}
+
+type ProductMutationResult {
+    createdAt: OffsetDateTime!
+    currentUnitPrice: BigDecimal!
+    description: String!
+    lastUpdatedAt: OffsetDateTime!
+    productId: Int!
+    stockCode: String!
+}
+
+type ProductResult {
+    createdAt: OffsetDateTime!
+    currentUnitPrice: BigDecimal!
+    description: String!
+    lastUpdatedAt: OffsetDateTime!
+    productId: Int!
+    stockCode: String!
+}
+
+"Root query type."
+type QueryRoot {
+    "Fetches a number of loginSessions. How many are fetched, how many are skipped, the ordering and which elements are included is determined by arguments."
+    loginSessions(
+        "Limit the number of results."
+        limit: Int!,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: LoginSessionOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: LoginSessionCriteria
+    ): [LoginSessionResult!]!
+    "Fetches a number of orders. How many are fetched, how many are skipped, the ordering and which elements are included is determined by arguments."
+    orders(
+        "Limit the number of results."
+        limit: Int!,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: OrderOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: OrderCriteria
+    ): [OrderResult!]!
+    "Fetches a number of users. How many are fetched, how many are skipped, the ordering and which elements are included is determined by arguments."
+    users(
+        "Limit the number of results."
+        limit: Int!,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: UserOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: UserCriteria
+    ): [UserResult!]!
+}
+
+type UserResult {
+    createdAt: OffsetDateTime!
+    email: String!
+    lastUpdatedAt: OffsetDateTime!
+    loginSessions(
+        "Limit the number of results."
+        limit: Int!,
+        "How many results should be skipped. Cannot be null."
+        offset: Int,
+        "Order by argument for the result list. Cannot be null."
+        orderBy: LoginSessionOrderBy,
+        "Boolean expression for determining which results should be included. Cannot be null."
+        where: LoginSessionCriteria
+    ): [LoginSessionResult!]!
+    name: String!
+    role: String!
+    userAccountId: Int!
+}
+
+"Enum for determining order by direction."
+enum OrderByDirectionEnum {
+    "Ascending order."
+    asc
+    "Descending order."
+    desc
+}
+
+"Enum for determining order by direction."
+enum OrderByDirectionWithNullsEnum {
+    "Ascending order with nulls first."
+    ascNullsFirst
+    "Ascending order with nulls last."
+    ascNullsLast
+    "Descending order with nulls first."
+    descNullsFirst
+    "Descending order with nulls last."
+    descNullsLast
+}
+
+"A sequence of bytes encoded as a String using the MIME format specified in RFC 2045. For example: \"SGVsbG8gV29ybGQ=\", which, when decoded becomes these bytes(hex): [48, 65, 6c, 6c, 6f, 20, 57, 6f, 72, 6c, 64]"
+scalar Base64
+
+"A signed decimal number of arbitrary precision encoded as a String in the format described in Java's BigDecimal constructor: https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html#BigDecimal-java.lang.String-. For example: \"94712.5124\""
+scalar BigDecimal
+
+"An integer in the interval -9223372036854775808 to 9223372036854775807."
+scalar Long
+
+"A single point in time encoded as a String in the ISO-8601 extended offset date-time format. For example: \"2011-12-03T10:15:30+01:00\""
+scalar OffsetDateTime
+
+"An integer in the interval -32768 to 32767."
+scalar Short
+
+"A universally unique identifier encoded as a String in the format described in RFC 4122. For example: \"b53d5ebf-4d1b-4252-8dab-29d3af225bbd\""
+scalar UUID
+
+"Type for creating a boolean expression for a field of type Boolean. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input BooleanCriteria {
+    eq: Boolean
+    in: [Boolean!]
+    ne: Boolean
+    notIn: [Boolean!]
+}
+
+input IntBetween {
+    lowerBound: Int!
+    upperBound: Int!
+}
+
+"Type for creating a boolean expression for a field of type Int. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input IntCriteria {
+    between: IntBetween
+    eq: Int
+    ge: Int
+    gt: Int
+    in: [Int!]
+    le: Int
+    lt: Int
+    ne: Int
+    notBetween: IntNotBetween
+    notIn: [Int!]
+}
+
+input IntNotBetween {
+    lowerBound: Int!
+    upperBound: Int!
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input LoginSessionCriteria {
+    createdAt: OffsetDateTimeCriteria
+    isSignedOut: BooleanCriteria
+    lastUpdatedAt: OffsetDateTimeCriteria
+    userId: IntCriteria
+}
+
+"Type for determining the order for result list of the loginSession field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input LoginSessionOrderBy {
+    createdAt: OrderByDirectionEnum
+    lastUpdatedAt: OrderByDirectionEnum
+}
+
+input OffsetDateTimeBetween {
+    lowerBound: OffsetDateTime!
+    upperBound: OffsetDateTime!
+}
+
+"Type for creating a boolean expression for a field of type OffsetDateTime. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input OffsetDateTimeCriteria {
+    between: OffsetDateTimeBetween
+    eq: OffsetDateTime
+    ge: OffsetDateTime
+    gt: OffsetDateTime
+    in: [OffsetDateTime!]
+    le: OffsetDateTime
+    lt: OffsetDateTime
+    ne: OffsetDateTime
+    notBetween: OffsetDateTimeNotBetween
+    notIn: [OffsetDateTime!]
+}
+
+input OffsetDateTimeNotBetween {
+    lowerBound: OffsetDateTime!
+    upperBound: OffsetDateTime!
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input OrderCriteria {
+    createdAt: OffsetDateTimeCriteria
+    customerId: IntCriteria
+    lastUpdatedAt: OffsetDateTimeCriteria
+    orderStatus: StringCriteria
+    purchaseOrderId: IntCriteria
+}
+
+"Type for determining the order for result list of the orderLine field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input OrderLineOrderBy {
+    orderLineId: OrderByDirectionEnum
+}
+
+"Type for determining the order for result list of the order field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input OrderOrderBy {
+    createdAt: OrderByDirectionEnum
+    lastUpdatedAt: OrderByDirectionEnum
+    purchaseOrderId: OrderByDirectionEnum
+}
+
+"Type for containing all data required to update a specific order object."
+input OrderToUpdate {
+    orderStatus: String
+    "Determines which order to update."
+    wherePurchaseOrderId: Int!
+}
+
+"Type for containing all data required to insert a new product object."
+input ProductToInsert {
+    currentUnitPrice: BigDecimal!
+    description: String!
+}
+
+"Type for containing all data required to update a specific product object."
+input ProductToUpdate {
+    currentUnitPrice: BigDecimal
+    description: String
+    "Determines which product to update."
+    whereProductId: Int!
+}
+
+"Type for creating a boolean expression for a field of type String. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input StringCriteria {
+    eq: String
+    ilike: String
+    in: [String!]
+    like: String
+    ne: String
+    notIlike: String
+    notIn: [String!]
+    notLike: String
+}
+
+"Type for creating a boolean expression to determine which results should be included in the result list. None of the fields are required, but they cannot be null. Setting multiple fields will create an expression that is the conjunction (AND) of all the fields that are set."
+input UserCriteria {
+    email: StringCriteria
+    name: StringCriteria
+    role: StringCriteria
+    userAccountId: IntCriteria
+}
+
+"Type for determining the order for result list of the user field. None of the fields are required, but they cannot be null. Setting multiple fields means the result list is ordered by multiple fields, where the field priority is determined by which fields are set first. For example setting orderBy: {foo: asc, bar: desc} orders the result list first by foo, then by bar."
+input UserOrderBy {
+    createdAt: OrderByDirectionEnum
+    lastUpdatedAt: OrderByDirectionEnum
+    userAccountId: OrderByDirectionEnum
+}

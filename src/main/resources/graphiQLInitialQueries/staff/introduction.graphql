@@ -1,0 +1,9 @@
+# Welcome
+# This is a GraphiQL instance for the staff api of Loppi's retail demo.
+
+# The client will try to fetch the GraphQL schema from the demo's staff api.
+# If you are not logged in, or if you are logged in and have not upgraded
+# your user to a staff role, then the client will not have authorization to
+# introspect or use the api.
+# To sign up, log in or upgrade to staff role, head to the demo welcome page at
+# https://retail-demo.loppi.io.

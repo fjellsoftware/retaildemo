@@ -1,0 +1,85 @@
+####
+query loginSessions {
+    loginSessions(limit: 10, orderBy: {createdAt: desc}){
+        userAccount {
+            userAccountId
+            username
+            name
+        }
+        createdAt
+        isSignedOut
+    }
+}
+
+####
+query getOrders {
+    orders(limit: 3 orderBy: { createdAt:desc}){
+        purchaseOrderId
+        orderStatus
+        customer{
+            userAccountId
+            username
+        }
+        orderLines(limit: 3, orderBy: {orderLineId: desc}){
+            unitPrice
+            quantity
+            product {
+                productId
+                stockCode
+            }
+        }
+    }
+}
+
+####
+query getOrderStatuses {
+    orders(limit: 4, orderBy: {createdAt: desc}){
+        orderStatus
+    }
+}
+
+####
+query getLoginSessions {
+    loginSessions(limit: 5 orderBy: { createdAt:desc}){
+        isSignedOut
+        userAccount {
+            name
+            role
+        }
+    }
+}
+
+####
+query getUsers {
+    users(limit: 4 where: { role: { eq: "CUSTOMER"}} orderBy: { createdAt:desc}){
+        username
+        name
+        role
+        loginSessions(limit: 5, orderBy: {createdAt: desc})		 {
+            isSignedOut
+        }
+    }
+}
+
+####
+mutation updateOrderStatuses ($purchaseOrderId: Int!) {
+    orderStatusBatchUpdate(ordersToUpdate: [{wherePurchaseOrderId: $purchaseOrderId, orderStatus: "SHIPPED"}]){
+        purchaseOrderId
+    }
+}
+
+####
+mutation productInsert ($productToInsert: ProductToInsert!){
+    productInsert(productToInsert: $productToInsert){
+        currentUnitPrice
+        description
+    }
+}
+
+####
+mutation productUpdate ($productId: Int!, $description: String!){
+    productUpdate(productToUpdate: { whereProductId: $productId, description: $description}){
+        description
+    }
+}
+

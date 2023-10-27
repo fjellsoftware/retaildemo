@@ -1,0 +1,131 @@
+####
+query getProducts {
+    products(limit: 5, orderBy: {createdAt: desc}){
+        description
+        currentUnitPrice
+    }
+}
+
+####
+query getLatestProductId {
+    products(limit: 1, orderBy: {createdAt: desc}){
+        productId
+    }
+}
+
+####
+mutation getSalt ($username: String!){
+    getBcryptSalt(username: $username){
+        salt
+    }
+}
+
+####
+mutation signUp ($username: String!, $passwordBcrypt: String!){
+    signUp(name: "John Doe" username: $username, passwordBcrypt: $passwordBcrypt){
+        succeeded
+    }
+}
+
+####
+query currentUser {
+    tryCurrentUser(limit: 1){
+        userAccountId
+        name
+        username
+    }
+}
+
+####
+mutation login ($username: String!, $passwordBcrypt: String!){
+    login(username: $username, passwordBcrypt: $passwordBcrypt){
+        succeeded
+    }
+}
+
+####
+mutation captcha ($token: String!){
+    verifyCaptcha(token: $token){
+        token
+    }
+}
+
+####
+query getOrders {
+    orders(limit: 8 orderBy: {createdAt: desc}){
+        purchaseOrderId
+        orderLines(limit: 5, orderBy: { orderLineId: asc }){
+            quantity
+            unitPrice
+            product {
+                productId
+                description
+                stockCode
+            }
+        }
+    }
+}
+
+####
+query getOrdersVariableLimits ($ordersLimit: Int! $orderLinesLimit: Int!){
+    orders(limit: $ordersLimit orderBy: { createdAt: desc}){
+        purchaseOrderId
+        orderLines(limit: $orderLinesLimit, orderBy: {orderLineId: asc}){
+            unitPrice
+        }
+    }
+}
+
+####
+query getOrderStatuses {
+    orders(limit: 4, orderBy: {createdAt: desc}){
+        orderStatus
+    }
+}
+
+####
+mutation placeOrder ($countryId: Int!, $address: String!,
+    $name: String!, $phoneNumber: String!
+    $orderLines: [OrderLineToInsert!]!){
+    placeOrder(orderToInsert: {countryId: $countryId,
+        address: $address, name: $name, phoneNumber: $phoneNumber
+        orderLinesToInsert: $orderLines}){
+        purchaseOrderId
+    }
+}
+
+####
+mutation signOut {
+    signOut {
+        ignored
+    }
+}
+
+####
+mutation upgradeToStaff {
+    demoUpgradeToStaff {
+        ignored
+    }
+}
+
+####
+mutation downgradeToCustomer {
+    demoDowngradeToCustomer {
+        ignored
+    }
+}
+
+####
+query introspectionTooDeep {
+    __schema {
+        types {
+            fields {
+                type {
+                    fields {
+                        name
+                    }
+                }
+            }
+        }
+    }
+}

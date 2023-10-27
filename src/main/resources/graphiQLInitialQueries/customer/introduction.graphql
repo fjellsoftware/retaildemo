@@ -1,0 +1,15 @@
+# Welcome
+# This is a GraphiQL instance for the customer api of Loppi's retail demo.
+
+# On the top left is a button where you can explore the graphql schema of the
+# customer api for this demo.
+# In the other tabs you can also find example requests for doing things like
+# getting a list of products ordered by price, or filtered by description,
+# placing orders or viewing orders for currently logged in user.
+# If you want to do things that require being logged in, you will have to do that
+# or get an error. You can sign up, log in and even upgrade to a staff user using
+# the demo welcome page at https://retail-demo.loppi.io.
+# If you signed up using the demo welcome page for this demo, then you are
+# already logged in.
+# All data submitted is deleted once it is 4 hours old. That includes login data,
+# order placements etc.

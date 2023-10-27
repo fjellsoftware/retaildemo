@@ -1,0 +1,7 @@
+introduction.graphql
+getLatestUsers.graphql
+getLatestLoginSessions.graphql
+getLatestOrders.graphql
+productInsert.graphql
+productUpdate.graphql
+markOrderShipped.graphql

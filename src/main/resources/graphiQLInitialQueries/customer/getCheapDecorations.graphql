@@ -1,0 +1,8 @@
+query getCheapDecorations {
+    products(limit: 50, orderBy: { currentUnitPrice: asc } where: { description: { like: "%DECORATION%"}}){
+        productId
+        stockCode
+        description
+        currentUnitPrice
+    }
+}
