@@ -99,12 +99,12 @@ public class DemoGraphiQLLoader {
                                       Map<String,Map<String,Object>> variablesByFileName, String url){
         try {
             String htmlWithUrl = htmlTemplateToFormat.replace("url: ''", String.format("url: '%s'", url));
-            ClassLoader classLoader = DemoGraphiQLLoader.class.getClassLoader();
-            InputStream fileNamesStream = classLoader.getResourceAsStream(
-                    Path.of(resourceQueryFilesPath.toString(), "initialQueriesFileNames").toString());
+            Class<? extends DemoGraphiQLLoader> aClass = this.getClass();
+            String path = Path.of(resourceQueryFilesPath.toString(), "initialQueriesFileNames").toString();
+            InputStream fileNamesStream = aClass.getResourceAsStream("/"+path);
             StringBuilder sb = new StringBuilder();
+            boolean anyQueries = false;
             if(fileNamesStream != null){
-
                 List<String> queryFileNames = new ArrayList<>();
                 Scanner fileNamesScanner = new Scanner(fileNamesStream);
                 while (fileNamesScanner.hasNextLine()) {
@@ -115,8 +115,12 @@ public class DemoGraphiQLLoader {
                 for (String queryFileName : queryFileNames) {
 
                     StringBuilder queryBuilder = new StringBuilder();
-                    try (InputStream initialQueryFileStream = classLoader.getResourceAsStream(
-                            Path.of(resourceQueryFilesPath.toString(), queryFileName).toString())){
+                    try (InputStream initialQueryFileStream = aClass.getResourceAsStream(
+                            "/" + Path.of(resourceQueryFilesPath.toString(), queryFileName).toString())){
+                        if(initialQueryFileStream == null){
+                            continue;
+                        }
+                        anyQueries = true;
                         Scanner scanner = new Scanner(initialQueryFileStream);
                         while (scanner.hasNextLine()) {
                             queryBuilder.append(scanner.nextLine()).append("\n");
@@ -133,7 +137,10 @@ public class DemoGraphiQLLoader {
                 sb.append(objectMapper.writeValueAsString(queries));
                 sb.append(",");
             }
-            return htmlWithUrl.replace("initialTabs: [],", sb.toString());
+            if(anyQueries){
+                return htmlWithUrl.replace("initialTabs: [],", sb.toString());
+            }
+            return htmlWithUrl.replace("initialTabs: [],", "");
         }catch (IOException | RuntimeException e) {
             throw new ApplicationInternalException("Failed to load initial tab query files for GraphiQL", e);
         }
