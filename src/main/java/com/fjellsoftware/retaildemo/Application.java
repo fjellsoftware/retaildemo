@@ -16,10 +16,7 @@ import com.fjellsoftware.retaildemo.graphqlexecutor.GraphQLExecutorStaff;
 import com.fjellsoftware.retaildemo.util.InetAddressUtils;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
-import io.javalin.http.Context;
-import io.javalin.http.Cookie;
-import io.javalin.http.HandlerType;
-import io.javalin.http.HttpStatus;
+import io.javalin.http.*;
 import io.javalin.http.staticfiles.Location;
 import io.loppi.orm.*;
 import io.loppi.graphql.GraphQLExecutionResult;
@@ -176,14 +173,16 @@ public class Application {
                 boolean cookieSecure = true;
                 boolean cookieHttpOnly = true;
                 int cookieVersion = 1;
-                switch (cookieModification){
-                case CookieToAdd toAdd -> ctx.cookie(new Cookie(toAdd.name(), toAdd.value(), cookiePath,
-                        24*3600, cookieSecure, cookieVersion, cookieHttpOnly));
+                Cookie cookie = switch (cookieModification){
+                case CookieToAdd toAdd -> new Cookie(toAdd.name(), toAdd.value(), cookiePath,
+                        24 * 3600, cookieSecure, cookieVersion, cookieHttpOnly);
                 // We could use ctx.removeCookie, but some applications used for development handles cookies
                 // incorrectly, so we set httpOnly and secure flags as well
-                case CookieToRemove toRemove -> ctx.cookie(new Cookie(toRemove.name(), "", cookiePath,
-                        0, cookieSecure, cookieVersion, cookieHttpOnly));
-                }
+                case CookieToRemove toRemove -> new Cookie(toRemove.name(), "", cookiePath,
+                        0, cookieSecure, cookieVersion, cookieHttpOnly);
+                };
+                cookie.setSameSite(SameSite.STRICT);
+                ctx.cookie(cookie);
             }
         }
     }
