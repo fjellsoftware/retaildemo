@@ -22,7 +22,7 @@ public class RequestSizeTests {
         this.testDependencies = new TestDependencies(false);
         CredentialManager credentialManager = new CredentialManager();
         UUID captchaToken = credentialManager.verifyCaptchaOrGetCache();
-        mainCustomerCredentials = credentialManager.signUpCustomerAndCheckLogin(captchaToken);
+        mainCustomerCredentials = credentialManager.signUpCustomerAndCheckLoggedIn(captchaToken);
     }
 
     @AfterAll

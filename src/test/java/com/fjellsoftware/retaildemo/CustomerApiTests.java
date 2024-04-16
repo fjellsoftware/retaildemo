@@ -85,7 +85,7 @@ public class CustomerApiTests {
         if(hCaptchaToken == null){
             _1_solveCaptcha();
         }
-        mainCustomerTestCredentials = credentialManager.signUpCustomerAndCheckLogin(hCaptchaToken);
+        mainCustomerTestCredentials = credentialManager.signUpCustomerAndCheckLoggedIn(hCaptchaToken);
         String authenticatedCurrentUserResponse = credentialManager.getCurrentUser(Opt.of(mainCustomerTestCredentials.sessionToken()));
         System.out.println(authenticatedCurrentUserResponse);
         checkCurrentUserResponseIsUserByCredentials(authenticatedCurrentUserResponse, mainCustomerTestCredentials);
@@ -131,7 +131,10 @@ public class CustomerApiTests {
                 mainCustomerTestCredentials.password());
         Map responseMap = objectMapper.readValue(httpResponse.body(), Map.class);
         assert responseMap.size() == 1;
-        assert responseMap.get("data") instanceof Map;
+        Map<String, Object> data = (Map<String, Object>) responseMap.get("data");
+        Map<String, Object> login = (Map<String, Object>) data.get("login");
+        Boolean succeeded = (Boolean) login.get("succeeded");
+        assert succeeded;
         Map<String, List<String>> httpHeaders = httpResponse.headers().map();
         List<String> setCookieHeaders = httpHeaders.get("set-cookie");
         assert setCookieHeaders != null && setCookieHeaders.size() == 1;

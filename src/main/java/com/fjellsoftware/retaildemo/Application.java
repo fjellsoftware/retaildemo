@@ -18,7 +18,7 @@ import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.*;
 import io.javalin.http.staticfiles.Location;
-import io.loppi.orm.*;
+import io.loppi.orm.PostgresExecutionException;
 import io.loppi.graphql.GraphQLExecutionResult;
 import io.loppi.graphql.GraphQLRequestException;
 import io.loppi.graphql.schema.GraphQLErrorTypeCategory;
@@ -38,8 +38,10 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.nio.charset.UnsupportedCharsetException;
 import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Application {
@@ -59,6 +61,7 @@ public class Application {
     private final Metrics metrics;
 
     public Application(ApplicationConfiguration configuration) {
+        logger.info("Starting Retail demo...");
         this.applicationConfiguration = configuration;
         this.applicationDependencies = new ApplicationDependencies(configuration);
         this.customerGraphQLExecutor = applicationDependencies.getGraphQLExecutorCustomer();
@@ -109,6 +112,8 @@ public class Application {
         scheduler.scheduleAtFixedRate(metrics::tryGatherAndStoreMetrics, 1, 1, TimeUnit.MINUTES);
         logger.info("Retail demo has successfully started in {} mode, version: {}.",
                 isProduction ? "production" : "development", applicationConfiguration.getVersion());
+        Thread shutdownHook = new Thread(() -> logger.info("Shutting down...\n"));
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
     void close(){
@@ -124,7 +129,7 @@ public class Application {
         }
         else{
             ctx.contentType(ContentType.APPLICATION_JSON.getMimeType());
-            ctx.result(GraphQLRequestException.createInternal().getJsonResult());
+            ctx.result(GraphQLRequestException.createInternal().jsonResult());
         }
         logger.error("Unexpected error.", e);
         ctx.status(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -153,7 +158,7 @@ public class Application {
         UserInfo userInfo = null;
         switch (userInfoOrError){
         case Right<UserInfo, GraphQLRequestException> right -> {
-            ctx.result(right.value().getJsonResult());
+            ctx.result(right.value().jsonResult());
             return;
         }
         case Left<UserInfo, GraphQLRequestException> left -> userInfo = left.value();
@@ -162,7 +167,7 @@ public class Application {
         GraphQLExecutorCustomer.ExecutionResultAndCookies executionResultAndCookies =
                 customerGraphQLExecutor.tryParseAndExecute(fullQuery, userInfo);
         GraphQLExecutionResult graphQLExecutionResult = executionResultAndCookies.executionResult();
-        ctx.result(graphQLExecutionResult.getJsonResult());
+        ctx.result(graphQLExecutionResult.jsonResult());
         if(graphQLExecutionResult instanceof GraphQLRequestException errorResult){
             handleGraphQLErrorCommon(ctx, errorResult);
         }
@@ -190,13 +195,13 @@ public class Application {
     private void handleStaffRequest(Context ctx){
         Either<UserInfo, GraphQLRequestException> userInfoOrError = processCommonApiHttpAndAuthentication(ctx);
         switch (userInfoOrError){
-        case Right<UserInfo, GraphQLRequestException> right -> ctx.result(right.value().getJsonResult());
+        case Right<UserInfo, GraphQLRequestException> right -> ctx.result(right.value().jsonResult());
         case Left<UserInfo, GraphQLRequestException> left -> {
             UserInfo userInfo = left.value();
             String fullQuery = ctx.body();
             GraphQLExecutionResult graphQLExecutionResult = staffGraphQLExecutor.tryParseAndExecute(fullQuery,
                     userInfo);
-            ctx.result(graphQLExecutionResult.getJsonResult());
+            ctx.result(graphQLExecutionResult.jsonResult());
             if(graphQLExecutionResult instanceof GraphQLRequestException errorResult){
                 handleGraphQLErrorCommon(ctx, errorResult);
             }
@@ -208,9 +213,9 @@ public class Application {
     }
 
     private final Right<UserInfo, GraphQLRequestException> unsupportedMediaTypeExceptionWrapped =
-            new Right<>(new GraphQLRequestException("Unsupported media type.", GraphQLErrorTypeCategory.VALIDATION));
+            new Right<>(new GraphQLRequestException("Unsupported media type.", GraphQLErrorTypeCategory.APPLICATION_VALIDATION));
     private final Right<UserInfo, GraphQLRequestException> unsupportedCharsetExceptionWrapped =
-            new Right<>(new GraphQLRequestException("Unsupported charset.", GraphQLErrorTypeCategory.VALIDATION));
+            new Right<>(new GraphQLRequestException("Unsupported charset.", GraphQLErrorTypeCategory.APPLICATION_VALIDATION));
     private Either<UserInfo, GraphQLRequestException> processCommonApiHttpAndAuthentication(Context ctx){
         ctx.contentType(ContentType.APPLICATION_JSON.getMimeType());
         InetAddress remoteAddress = InetAddressUtils.extractRemoteFromContext(ctx);
@@ -237,11 +242,7 @@ public class Application {
         }
 
         String captchaCookieValueOrNull = ctx.cookie(HCaptchaVerifier.H_CAPTCHA_TOKEN_COOKIE_NAME);
-        boolean captchaIsValid = false;
-        if (captchaCookieValueOrNull != null && captchaCache.checkTokenPresent(captchaCookieValueOrNull)) {
-            captchaIsValid = true;
-        }
-
+        boolean captchaIsValid = captchaCookieValueOrNull != null && captchaCache.checkTokenPresent(captchaCookieValueOrNull);
         UserInfo userInfo;
         String sessionCookieOrNull = ctx.cookie(SESSION_TOKEN_COOKIE_NAME);
         if(sessionCookieOrNull == null){

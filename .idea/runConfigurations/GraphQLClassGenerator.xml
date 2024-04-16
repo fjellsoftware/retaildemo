@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GraphQLClassGenerator" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.fjellsoftware.retaildemo.GraphQLClassGenerator" />
+    <option name="MAIN_CLASS_NAME" value="com.fjellsoftware.retaildemo.development.AppGraphQLClassGenerator" />
     <module name="retail-demo" />
     <extension name="coverage">
       <pattern>

@@ -38,5 +38,5 @@
   "rateLimit": { "errors":  [{"message": "Too many requests, slow down."}]},
   "mutationTooBig": { "errors":  [{"message": "Request too big."}]},
   "queryTooBig":  {"errors":[{"message":"Maximum nodes allowed to fetch in one root field is 200, but field [orders] fetches [420]."}]},
-  "queryTooDeep": {"errors":[{"message":"Maximum query depth is 3, found query depth [5] in field [__schema]."}]}
+  "queryTooDeep": {"errors":[{"message":"Maximum output field depth is 3, found depth [5] in field [__schema]."}]}
 }

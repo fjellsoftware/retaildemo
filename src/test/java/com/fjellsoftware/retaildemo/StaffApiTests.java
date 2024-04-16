@@ -35,7 +35,7 @@ public class StaffApiTests {
         this.testDependencies = new TestDependencies(false);
         this.credentialManager = new CredentialManager();
         UUID captchaToken = credentialManager.verifyCaptchaOrGetCache();
-        TestCredentials customerCredentials = credentialManager.signUpCustomerAndCheckLogin(captchaToken);
+        TestCredentials customerCredentials = credentialManager.signUpCustomerAndCheckLoggedIn(captchaToken);
         credentialManager.tryUpgradeToStaff(customerCredentials.sessionToken());
         mainStaffCredentials = customerCredentials;
     }

@@ -86,13 +86,13 @@ public class GraphQLExecutorStaff {
         for (StaffQueryRootField rootField : rootFields) {
             switch (rootField) {
             case StaffIntrospectionRootField staffIntrospectionRootField ->
-                    executableQueryFields.add(staffIntrospectionRootField.queryField());
+                    executableQueryFields.add(staffIntrospectionRootField);
             case UsersQueryField usersQueryField ->
-                    executableQueryFields.add(usersQueryField.queryField());
+                    executableQueryFields.add(usersQueryField);
             case OrdersQueryField ordersQueryField ->
-                    executableQueryFields.add(ordersQueryField.queryField());
+                    executableQueryFields.add(ordersQueryField);
             case LoginSessionsQueryField loginSessionsQueryField ->
-                    executableQueryFields.add(loginSessionsQueryField.queryField());
+                    executableQueryFields.add(loginSessionsQueryField);
             }
         }
         return graphQLService.executeQuery(executableQueryFields);

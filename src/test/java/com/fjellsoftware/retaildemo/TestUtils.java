@@ -14,6 +14,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.loppi.orm.PostgresExecutionException;
 import com.fjellsoftware.javafunctionalutils.*;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.*;
@@ -76,7 +77,7 @@ public class TestUtils {
         String body = executeGraphQLRequestWithHeadersGetResultBody(applicationURI, operationString, variablesNullable, sessionTokenOpt);
         try {
             Map responseMap = objectMapper.readValue(body, Map.class);
-            assert responseMap.equals(expectedResultMap);
+            Assertions.assertEquals(expectedResultMap, responseMap);
         } catch (Exception e){
             throw new RuntimeException(e);
         }

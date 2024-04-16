@@ -27,7 +27,7 @@ public class RateLimitTests {
         TestDependencies testDependencies = new TestDependencies(true);
         CredentialManager credentialManager = new CredentialManager();
         UUID captchaToken = credentialManager.verifyCaptchaOrGetCache();
-        mainCustomerCredentials = credentialManager.signUpCustomerAndCheckLogin(captchaToken);
+        mainCustomerCredentials = credentialManager.signUpCustomerAndCheckLoggedIn(captchaToken);
         testDependencies.close();
     }
 

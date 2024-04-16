@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ORMClassGenerator" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="com.fjellsoftware.retaildemo.ORMClassGenerator" />
+    <option name="MAIN_CLASS_NAME" value="com.fjellsoftware.retaildemo.development.AppORMClassGenerator" />
     <module name="retail-demo" />
     <extension name="coverage">
       <pattern>

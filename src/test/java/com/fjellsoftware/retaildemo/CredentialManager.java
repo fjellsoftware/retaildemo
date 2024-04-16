@@ -15,8 +15,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.*;
 
 public class CredentialManager {
@@ -118,12 +116,12 @@ public class CredentialManager {
         return salt;
     }
 
-    public TestCredentials signUpCustomerAndCheckLogin(UUID hCaptchaToken){
+    private final Random random = new Random();
+    public TestCredentials signUpCustomerAndCheckLoggedIn(UUID hCaptchaToken){
         try {
             Map<String, Object> variables = new HashMap<>();
-            byte[] hash = MessageDigest.getInstance("SHA-256").digest(hCaptchaToken.toString().getBytes(StandardCharsets.UTF_8));
-            String encoded = Base64.getEncoder().encodeToString(hash).substring(0, 10);
-            String username = "john.doe_" + encoded;
+            String randomNumberString = String.format("%08d", random.nextInt(0, 10_000_000));
+            String username = "john.doe_" + randomNumberString;
             String passwordPlaintext = UUID.randomUUID().toString();
             String salt = executeGetSalt(username);
             String hashedPassword = BCrypt.hashpw(passwordPlaintext, salt);
