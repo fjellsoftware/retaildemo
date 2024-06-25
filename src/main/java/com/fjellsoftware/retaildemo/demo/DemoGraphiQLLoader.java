@@ -8,6 +8,7 @@ package com.fjellsoftware.retaildemo.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fjellsoftware.javafunctionalutils.opt.Opt;
 import com.fjellsoftware.javafunctionalutils.opt.Some;
+import com.fjellsoftware.retaildemo.ApplicationConfiguration;
 import com.fjellsoftware.retaildemo.ApplicationInternalException;
 import com.fjellsoftware.retaildemo.authorizationcommon.RateLimiter;
 import com.fjellsoftware.retaildemo.util.InetAddressUtils;
@@ -27,8 +28,9 @@ public class DemoGraphiQLLoader {
     private final Opt<String> staffGraphiQLHTML;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RateLimiter rateLimiter;
+    private final ApplicationConfiguration applicationConfiguration;
 
-    public DemoGraphiQLLoader(RateLimiter rateLimiter, String hostName) {
+    public DemoGraphiQLLoader(RateLimiter rateLimiter, String hostName, ApplicationConfiguration applicationConfiguration) {
         Opt<String> graphiQLHTMLTemplate = initializeGraphiQLHTMLFileString();
         if(!(graphiQLHTMLTemplate instanceof Some<String> some)){
             this.customerGraphiQLHTML = Opt.empty();
@@ -40,6 +42,7 @@ public class DemoGraphiQLLoader {
             this.staffGraphiQLHTML = Opt.of(initializeStaffGraphiQLHTML(template, hostName));
         }
         this.rateLimiter = rateLimiter;
+        this.applicationConfiguration = applicationConfiguration;
     }
 
     private String initializeCustomerGraphiQLHTML(String htmlTemplate, String protocolAndDomainBaseUrl){
@@ -160,8 +163,8 @@ public class DemoGraphiQLLoader {
         return Opt.of(sb.toString());
     }
 
-    private void httpGetGraphiQLCommon(Context ctx, Opt<String> htmlOpt){
-        InetAddress remoteAddress = InetAddressUtils.extractRemoteFromContext(ctx);
+    private void httpGetGraphiQLCommon(Context ctx, Opt<String> htmlOpt, ApplicationConfiguration applicationConfiguration){
+        InetAddress remoteAddress = InetAddressUtils.extractRemoteFromContext(ctx, applicationConfiguration);
         boolean didConsume = rateLimiter.tryConsumeRegular(remoteAddress, 1);
         if(!didConsume){
             ctx.html("Too many requests.");
@@ -183,10 +186,10 @@ public class DemoGraphiQLLoader {
 
     }
     public void httpGetCustomerGraphiQL(Context ctx){
-        httpGetGraphiQLCommon(ctx, customerGraphiQLHTML);
+        httpGetGraphiQLCommon(ctx, customerGraphiQLHTML, applicationConfiguration);
     }
 
     public void httpGetStaffGraphiQL(Context ctx){
-        httpGetGraphiQLCommon(ctx, staffGraphiQLHTML);
+        httpGetGraphiQLCommon(ctx, staffGraphiQLHTML, applicationConfiguration);
     }
 }

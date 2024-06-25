@@ -5,6 +5,8 @@
 
 package com.fjellsoftware.retaildemo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fjellsoftware.javafunctionalutils.ImmutableSet;
 import com.fjellsoftware.javafunctionalutils.either.Either;
 import com.fjellsoftware.javafunctionalutils.either.Left;
 import com.fjellsoftware.javafunctionalutils.either.Right;
@@ -35,13 +37,23 @@ import org.apache.hc.core5.http.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.UnsupportedCharsetException;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class Application {
@@ -59,6 +71,8 @@ public class Application {
     private final ApplicationDependencies applicationDependencies;
     private final ApplicationConfiguration applicationConfiguration;
     private final Metrics metrics;
+    private final AtomicReference<ImmutableSet<String>> healthcheckIpsInetToStringReference = new AtomicReference<>(ImmutableSet.empty());
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public Application(ApplicationConfiguration configuration) {
         logger.info("Starting Retail demo...");
@@ -110,6 +124,7 @@ public class Application {
             }, 1, 1, TimeUnit.MINUTES);
         }
         scheduler.scheduleAtFixedRate(metrics::tryGatherAndStoreMetrics, 1, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::checkHealthcheckNodeIps, 2, 60, TimeUnit.SECONDS);
         logger.info("Retail demo has successfully started in {} mode, version: {}.",
                 isProduction ? "production" : "development", applicationConfiguration.getVersion());
         Thread shutdownHook = new Thread(() -> logger.info("Shutting down...\n"));
@@ -136,9 +151,15 @@ public class Application {
     }
 
     private void recordIncomingHttpMetrics(Context ctx){
+        if (isHealthcheck(ctx)) {
+            return;
+        }
         Metrics.incrementHttpRequestIncoming();
     }
     private void recordOutgoingHttpMetrics(Context ctx){
+        if (isHealthcheck(ctx)) {
+            return;
+        }
         Metrics.incrementHttpRequestOutgoing();
         HttpStatus status = ctx.status();
         int statusCode = status.getCode();
@@ -151,6 +172,11 @@ public class Application {
         else if(statusCode >= 500){
             Metrics.incrementHttp500();
         }
+    }
+
+    private boolean isHealthcheck(Context ctx){
+        String addressString = InetAddressUtils.extractRemoteFromContext(ctx, applicationConfiguration).toString();
+        return healthcheckIpsInetToStringReference.get().contains(addressString);
     }
 
     private void handleCustomerRequest(Context ctx){
@@ -218,7 +244,7 @@ public class Application {
             new Right<>(new GraphQLRequestException("Unsupported charset.", GraphQLErrorTypeCategory.APPLICATION_VALIDATION));
     private Either<UserInfo, GraphQLRequestException> processCommonApiHttpAndAuthentication(Context ctx){
         ctx.contentType(ContentType.APPLICATION_JSON.getMimeType());
-        InetAddress remoteAddress = InetAddressUtils.extractRemoteFromContext(ctx);
+        InetAddress remoteAddress = InetAddressUtils.extractRemoteFromContext(ctx, applicationConfiguration);
         boolean couldConsume = rateLimiter.tryConsumeRegular(remoteAddress, 1);
         if(!couldConsume){
             ctx.status(HttpStatus.TOO_MANY_REQUESTS);
@@ -304,4 +330,30 @@ public class Application {
         }
     }
 
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private void checkHealthcheckNodeIps(){
+        try{
+            checkHealthcheckNodeIpsInternal();
+        } catch (Exception e) {
+            logger.error("Unexpected error while updating healthcheck ips.", e);
+        }
+    }
+    private void checkHealthcheckNodeIpsInternal() throws URISyntaxException, IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder(new URI("https://updown.io/api/nodes")).GET().build();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        String body = response.body();
+        Map<String, Map<String, Object>> map = objectMapper.readValue(body, Map.class);
+        Set<String> healthcheckAddresses = new HashSet<>();
+        for (Map.Entry<String, Map<String, Object>> serverObjectEntry : map.entrySet()) {
+            Map<String, Object> serverObject = serverObjectEntry.getValue();
+            String ipv4 = (String) serverObject.get("ip");
+            String ipv6 = (String) serverObject.get("ip6");
+            InetAddress ip4Address = InetAddress.getByName(ipv4);
+            InetAddress ip6Address = InetAddress.getByName(ipv6);
+            healthcheckAddresses.add(ip4Address.toString());
+            healthcheckAddresses.add(ip6Address.toString());
+        }
+        this.healthcheckIpsInetToStringReference.set(new ImmutableSet<>(healthcheckAddresses));
+    }
 }

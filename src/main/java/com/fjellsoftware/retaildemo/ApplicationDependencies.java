@@ -49,7 +49,7 @@ public class ApplicationDependencies {
         this.loginSessionService = createLoginSessionAuthenticationService(databaseService, meta);
         this.rateLimiter = new RateLimiter(configuration.isRateLimitEnabled());
         this.captchaCache = new HCaptchaCache();
-        this.graphiQLLoader = new DemoGraphiQLLoader(rateLimiter, hostName);
+        this.graphiQLLoader = new DemoGraphiQLLoader(rateLimiter, hostName, configuration);
         this.customerGraphQLService = new CustomerGraphQLService(customerGraphQLServiceRaw);
         StaffGraphQLService staffGraphQLService = new StaffGraphQLService(staffGraphQLServiceRaw);
         this.domains = createDomains(loppiService, loginSessionService, rateLimiter, captchaCache,
