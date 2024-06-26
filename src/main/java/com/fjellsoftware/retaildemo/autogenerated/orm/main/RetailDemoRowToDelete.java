@@ -7,5 +7,5 @@ import io.loppi.orm.metamodel.RowToDelete;
 /////////////////////
 
 public sealed interface RetailDemoRowToDelete extends RowToDelete, RetailDemoRowToMutate permits 
-CountryToDelete, LoginSessionToDelete, MetricKindToDelete, MetricValueToDelete, OrderLineToDelete, 
-ProductToDelete, PurchaseOrderToDelete, UserAccountToDelete {}
+CountryToDelete, LoginSessionToDelete, OrderLineToDelete, ProductToDelete, PurchaseOrderToDelete, 
+UserAccountToDelete {}

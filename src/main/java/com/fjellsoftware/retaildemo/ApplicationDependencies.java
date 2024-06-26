@@ -62,7 +62,7 @@ public class ApplicationDependencies {
                 customerGraphQLService, captchaCache);
         this.graphQLExecutorCustomer = createCustomerGraphQLExecutor(customerGraphQLService, customerGraphQLServiceRaw,
                 domains, rateLimiter, captchaVerifier, bCryptSalter);
-        this.metrics = new Metrics(loppiService);
+        this.metrics = new Metrics(coreDependencies.getMetricsService());
     }
 
     private LoginSessionService createLoginSessionAuthenticationService(

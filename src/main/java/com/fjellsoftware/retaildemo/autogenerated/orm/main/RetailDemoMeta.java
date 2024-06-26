@@ -13,8 +13,6 @@ public final class RetailDemoMeta{
     private final DatabaseSchema databaseSchema;
     private final CountryMeta countryMeta;
     private final LoginSessionMeta loginSessionMeta;
-    private final MetricKindMeta metricKindMeta;
-    private final MetricValueMeta metricValueMeta;
     private final OrderLineMeta orderLineMeta;
     private final ProductMeta productMeta;
     private final PurchaseOrderMeta purchaseOrderMeta;
@@ -25,8 +23,6 @@ public final class RetailDemoMeta{
         this.databaseSchema = databaseSchema;
         this.countryMeta = new CountryMeta(oRMMetamodel);
         this.loginSessionMeta = new LoginSessionMeta(oRMMetamodel);
-        this.metricKindMeta = new MetricKindMeta(oRMMetamodel);
-        this.metricValueMeta = new MetricValueMeta(oRMMetamodel);
         this.orderLineMeta = new OrderLineMeta(oRMMetamodel);
         this.productMeta = new ProductMeta(oRMMetamodel);
         this.purchaseOrderMeta = new PurchaseOrderMeta(oRMMetamodel);
@@ -47,14 +43,6 @@ public final class RetailDemoMeta{
 
     public @NotNull LoginSessionMeta getLoginSessionMeta(){
         return loginSessionMeta;
-    }
-
-    public @NotNull MetricKindMeta getMetricKindMeta(){
-        return metricKindMeta;
-    }
-
-    public @NotNull MetricValueMeta getMetricValueMeta(){
-        return metricValueMeta;
     }
 
     public @NotNull OrderLineMeta getOrderLineMeta(){

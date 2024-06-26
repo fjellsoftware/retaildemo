@@ -36,7 +36,7 @@ public class DemoDatabaseResetter {
 
     public static void main(String[] args) throws PostgresExecutionException {
         LoggerInitializer.initializeDevelopmentConsoleLogger();
-        HikariDataSource dataSource = CoreDependencies.createDataSource(System.getProperty("user.home"));
+        HikariDataSource dataSource = CoreDependencies.createMainDataSource(System.getProperty("user.home"));
         OffsetDateTime offsetDateTime2022 =
                 OffsetDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         resetDatabase(dataSource, offsetDateTime2022);

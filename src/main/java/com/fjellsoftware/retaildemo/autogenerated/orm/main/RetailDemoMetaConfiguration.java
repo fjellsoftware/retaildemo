@@ -13,8 +13,6 @@ public final class RetailDemoMetaConfiguration{
         return Arrays.asList(
             createCountryResultMetadata(),
             createLoginSessionResultMetadata(),
-            createMetricKindResultMetadata(),
-            createMetricValueResultMetadata(),
             createOrderLineResultMetadata(),
             createProductResultMetadata(),
             createPurchaseOrderResultMetadata(),
@@ -38,25 +36,6 @@ public final class RetailDemoMetaConfiguration{
                 LoginSessionResult.class, LoginSessionToInsert.class)
                 .setIdUpdateDeleteReference(LoginSessionMeta.loginSessionIdInternalReference,
                         LoginSessionToUpdate.class, LoginSessionToDelete.class, LoginSessionReference.class);
-    }
-
-    private EntityMetadataConfiguration<MetricKindResult> createMetricKindResultMetadata() {
-        return new EntityMetadataConfiguration<>(
-                MetricKindMeta.BASE_NAME, MetricKindMeta.PLURAL_NAME,
-                MetricKindMeta.TABLE_NAME, MetricKindMeta.COLUMN_ATTRIBUTE_NAME_TO_COLUMN_NAME,
-                MetricKindResult.class, MetricKindToInsert.class)
-                .setIdUpdateDeleteReference(MetricKindMeta.metricKindIdInternalReference,
-                        MetricKindToUpdate.class, MetricKindToDelete.class, MetricKindReference.class)
-                .mapPluralAttributeToSingularAttribute(MetricKindMeta.metricValuesInternalReference, MetricValueMeta.metricKindInternalReference);
-    }
-
-    private EntityMetadataConfiguration<MetricValueResult> createMetricValueResultMetadata() {
-        return new EntityMetadataConfiguration<>(
-                MetricValueMeta.BASE_NAME, MetricValueMeta.PLURAL_NAME,
-                MetricValueMeta.TABLE_NAME, MetricValueMeta.COLUMN_ATTRIBUTE_NAME_TO_COLUMN_NAME,
-                MetricValueResult.class, MetricValueToInsert.class)
-                .setIdUpdateDeleteReference(MetricValueMeta.metricValueIdInternalReference,
-                        MetricValueToUpdate.class, MetricValueToDelete.class, MetricValueReference.class);
     }
 
     private EntityMetadataConfiguration<OrderLineResult> createOrderLineResultMetadata() {

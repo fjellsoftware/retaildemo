@@ -7,6 +7,6 @@ import io.loppi.orm.metamodel.TableQueryResult;
 /////////////////////
 
 public sealed interface RetailDemoTableQueryResult extends TableQueryResult permits 
-CountryResult, LoginSessionResult, MetricKindResult, MetricValueResult, OrderLineResult, 
-ProductResult, PurchaseOrderResult, UserAccountResult {
+CountryResult, LoginSessionResult, OrderLineResult, ProductResult, PurchaseOrderResult, 
+UserAccountResult {
 }

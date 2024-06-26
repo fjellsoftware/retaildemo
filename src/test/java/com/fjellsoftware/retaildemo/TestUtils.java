@@ -37,7 +37,7 @@ public class TestUtils {
 
     public static void cleanup(TestDependencies testDependencies) throws PostgresExecutionException {
         testDependencies.close();
-        HikariDataSource dataSource = CoreDependencies.createDataSource(System.getProperty("user.home"));
+        HikariDataSource dataSource = CoreDependencies.createMainDataSource(System.getProperty("user.home"));
         OffsetDateTime offsetDateTime2022 = OffsetDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         DemoDatabaseResetter.resetDatabase(dataSource, offsetDateTime2022);
         dataSource.close();

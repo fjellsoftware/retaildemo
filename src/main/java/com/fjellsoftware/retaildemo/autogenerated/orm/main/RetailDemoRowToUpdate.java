@@ -7,5 +7,5 @@ import io.loppi.orm.metamodel.RowToUpdate;
 /////////////////////
 
 public sealed interface RetailDemoRowToUpdate extends RowToUpdate, RetailDemoRowToUpsert permits 
-CountryToUpdate, LoginSessionToUpdate, MetricKindToUpdate, MetricValueToUpdate, OrderLineToUpdate, 
-ProductToUpdate, PurchaseOrderToUpdate, UserAccountToUpdate {}
+CountryToUpdate, LoginSessionToUpdate, OrderLineToUpdate, ProductToUpdate, PurchaseOrderToUpdate, 
+UserAccountToUpdate {}

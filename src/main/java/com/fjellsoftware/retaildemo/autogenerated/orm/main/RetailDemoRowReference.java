@@ -7,6 +7,6 @@ import io.loppi.orm.metamodel.RowReference;
 /////////////////////
 
 public sealed interface RetailDemoRowReference extends RowReference permits 
-CountryReference, LoginSessionReference, MetricKindReference, MetricValueReference, OrderLineReference, 
-ProductReference, PurchaseOrderReference, UserAccountReference {
+CountryReference, LoginSessionReference, OrderLineReference, ProductReference, PurchaseOrderReference, 
+UserAccountReference {
 }

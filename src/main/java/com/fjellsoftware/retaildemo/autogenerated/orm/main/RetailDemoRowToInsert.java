@@ -7,5 +7,5 @@ import io.loppi.orm.metamodel.RowToInsert;
 /////////////////////
 
 public sealed interface RetailDemoRowToInsert extends RowToInsert, RetailDemoRowToUpsert permits 
-CountryToInsert, LoginSessionToInsert, MetricKindToInsert, MetricValueToInsert, OrderLineToInsert, 
-ProductToInsert, PurchaseOrderToInsert, UserAccountToInsert {}
+CountryToInsert, LoginSessionToInsert, OrderLineToInsert, ProductToInsert, PurchaseOrderToInsert, 
+UserAccountToInsert {}
