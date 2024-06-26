@@ -148,29 +148,33 @@ public class Application {
         }
         logger.error("Unexpected error.", e);
         ctx.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        Metrics.incrementMetric(Metrics.Kind.UNHANDLED_SERVER_EXCEPTION);
     }
 
     private void recordIncomingHttpMetrics(Context ctx){
         if (isHealthcheck(ctx)) {
             return;
         }
-        Metrics.incrementHttpRequestIncoming();
+        Metrics.incrementMetric(Metrics.Kind.HTTP_TOTAL_INCOMING);
     }
     private void recordOutgoingHttpMetrics(Context ctx){
         if (isHealthcheck(ctx)) {
             return;
         }
-        Metrics.incrementHttpRequestOutgoing();
+        Metrics.incrementMetric(Metrics.Kind.HTTP_TOTAL_OUTGOING);
         HttpStatus status = ctx.status();
         int statusCode = status.getCode();
         if(statusCode >= 200 && statusCode < 300){
-            Metrics.incrementHttp200();
+            Metrics.incrementMetric(Metrics.Kind.HTTP_200);
+        }
+        else if(statusCode >= 300 && statusCode < 400){
+            Metrics.incrementMetric(Metrics.Kind.HTTP_300);
         }
         else if(statusCode >= 400 && statusCode < 500){
-            Metrics.incrementHttp400();
+            Metrics.incrementMetric(Metrics.Kind.HTTP_400);
         }
         else if(statusCode >= 500){
-            Metrics.incrementHttp500();
+            Metrics.incrementMetric(Metrics.Kind.HTTP_500);
         }
     }
 

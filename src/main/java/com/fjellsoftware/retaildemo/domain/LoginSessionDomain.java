@@ -122,7 +122,7 @@ public class LoginSessionDomain {
         String captchaToken = captchaUser.captchaToken();
         boolean wasConsumed = rateLimiter.checkCanConsumeLoginGraphQL(captchaToken);
         if(!wasConsumed){
-            Metrics.incrementLoginError();
+            Metrics.incrementMetric(Metrics.Kind.LOGIN_ERROR);
             LoginResult tooManyAttemptsResult = new LoginResult(false, true);
             GraphQLExecutableMutationField executableMutationField = customerGraphQLService
                     .resolveMutationField(tooManyAttemptsResult, loginMutationField);
@@ -166,13 +166,13 @@ public class LoginSessionDomain {
         GraphQLExecutableMutationField mutationField = customerGraphQLService.resolveWithRowsMutationField(
                         new LoginResult(true, false), loginMutationField, List.of(userSessionToInsert));
         CookieToAdd loginSessionCookie = new CookieToAdd(Application.SESSION_TOKEN_COOKIE_NAME, sessionId.toString());
-        Metrics.incrementLoginSuccess();
+        Metrics.incrementMetric(Metrics.Kind.LOGIN_SUCCESS);
         return new MutationFieldAndCookies(mutationField, List.of(loginSessionCookie));
     }
 
     private MutationFieldAndCookies loginFailed(
             InetAddress remoteAddress, String captchaToken, LoginMutationField loginMutationField) {
-        Metrics.incrementLoginError();
+        Metrics.incrementMetric(Metrics.Kind.LOGIN_ERROR);
         rateLimiter.consumeLoginFailedGraphQL(remoteAddress, captchaToken);
         LoginResult failedLoginResult = new LoginResult(false, false);
         GraphQLExecutableMutationField executableMutationField =

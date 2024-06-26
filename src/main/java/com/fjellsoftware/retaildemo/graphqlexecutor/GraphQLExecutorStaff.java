@@ -58,20 +58,20 @@ public class GraphQLExecutorStaff {
         case StaffQueryRequest queryRequest -> {
             GraphQLExecutionResult graphQLExecutionResult = executeQuery(userInfo, queryRequest);
             if(graphQLExecutionResult instanceof GraphQLExecutionDataResult){
-                Metrics.incrementStaffQueriesSuccess();
+                Metrics.incrementMetric(Metrics.Kind.STAFF_QUERIES_SUCCESS);
             }
             else{
-                Metrics.incrementStaffQueriesError();
+                Metrics.incrementMetric(Metrics.Kind.STAFF_QUERIES_ERROR);
             }
             yield graphQLExecutionResult;
         }
         case StaffMutationRequest mutationRequest -> {
             GraphQLExecutionResult graphQLExecutionResult = executeMutation(mutationRequest, userInfo);
             if(graphQLExecutionResult instanceof GraphQLExecutionDataResult){
-                Metrics.incrementStaffMutationsSuccess();
+                Metrics.incrementMetric(Metrics.Kind.STAFF_MUTATIONS_SUCCESS);
             }
             else{
-                Metrics.incrementStaffMutationsError();
+                Metrics.incrementMetric(Metrics.Kind.STAFF_MUTATIONS_ERROR);
             }
             yield graphQLExecutionResult;
         }

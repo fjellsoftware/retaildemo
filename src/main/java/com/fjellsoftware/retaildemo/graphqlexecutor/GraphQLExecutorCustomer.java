@@ -69,10 +69,10 @@ public class GraphQLExecutorCustomer {
             ExecutionResultAndCookies executionResultAndCookies = executeQuery(queryRequest, userInfo);
             GraphQLExecutionResult executionResult = executionResultAndCookies.executionResult;
             if(executionResult instanceof GraphQLExecutionDataResult){
-                Metrics.incrementCustomerQueriesSuccess();
+                Metrics.incrementMetric(Metrics.Kind.CUSTOMER_QUERIES_SUCCESS);
             }
             else{
-                Metrics.incrementCustomerQueriesError();
+                Metrics.incrementMetric(Metrics.Kind.CUSTOMER_QUERIES_ERROR);
             }
             yield executionResultAndCookies;
         }
@@ -80,15 +80,15 @@ public class GraphQLExecutorCustomer {
             ExecutionResultAndCookies executionResultAndCookies = executeMutation(mutationRequest, userInfo);
             GraphQLExecutionResult executionResult = executionResultAndCookies.executionResult;
             if(executionResult instanceof GraphQLExecutionDataResult){
-                Metrics.incrementCustomerMutationsSuccess();
+                Metrics.incrementMetric(Metrics.Kind.CUSTOMER_MUTATIONS_SUCCESS);
                 for (CustomerMutationRootField rootField : mutationRequest.rootFields()) {
                     if (rootField instanceof PlaceOrderMutationField) {
-                        Metrics.incrementPurchaseOrdersSuccess();
+                        Metrics.incrementMetric(Metrics.Kind.PURCHASE_ORDER_SUCCESS);
                     }
                 }
             }
             else{
-                Metrics.incrementCustomerMutationsError();
+                Metrics.incrementMetric(Metrics.Kind.CUSTOMER_MUTATIONS_ERROR);
             }
             yield executionResultAndCookies;
         }

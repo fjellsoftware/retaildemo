@@ -52,7 +52,7 @@ public class RateLimiter {
         LocalBucket bucketForUser = regularRateLimitBucketsByIp.get(addressLong, this::createNewRegularBucket);
         boolean succeeded = bucketForUser.tryConsume(tokens);
         if(!succeeded){
-            Metrics.incrementIpRateLimitTrigger();
+            Metrics.incrementMetric(Metrics.Kind.IP_RATE_LIMIT_TRIGGERS);
         }
         return succeeded;
     }
@@ -78,7 +78,7 @@ public class RateLimiter {
         LocalBucket bucketForUser = loginRateLimitBucketsByCaptcha.get(captchaToken, this::createNewLoginBucket);
         boolean succeeded = bucketForUser.getAvailableTokens() > 0;
         if(!succeeded){
-            Metrics.incrementLoginRateLimitTrigger();
+            Metrics.incrementMetric(Metrics.Kind.LOGIN_RATE_LIMIT_TRIGGERS);
         }
         return succeeded;
     }
