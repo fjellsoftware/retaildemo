@@ -95,7 +95,7 @@ public class Metrics {
         ImmutableList<MetricKindResult> deserialize = queryResult.deserialize();
         if(deserialize.size() == maximumNumberOfMetrics){
             throw new ApplicationInternalException("There may be more than 1000 kinds of metrics in the database, but" +
-                    " Loppi server was not built to handle that.");
+                    " retaildemo was not built to handle that.");
         }
         Map<String, Long> metricsKindName_Id = new HashMap<>();
         for (MetricKindResult metricKindResult : deserialize) {
